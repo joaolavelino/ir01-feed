@@ -1,0 +1,58 @@
+.comment {
+  display: flex;
+  gap: 1rem;
+}
+
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.commentCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--gray-600);
+  border-radius: 8px;
+}
+
+.avatar {
+  box-sizing: initial;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 8px;
+}
+
+.commentCard > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.commentCard > header svg {
+  color: var(--gray-300);
+  transition: 0.1s;
+  cursor: pointer;
+}
+
+.commentCard > header svg:hover {
+  color: var(--green-300);
+}
+
+.commentCard > p {
+  color: var(--gray-100);
+}
+
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+}
+
+.authorInfo strong {
+  color: var(--gray-100);
+}
+.authorInfo time {
+  font-size: 0.875rem;
+}

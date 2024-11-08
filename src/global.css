@@ -8,7 +8,12 @@
   --gray-800: #202024;
   --gray-900: #121214;
 
+  --green-300: #00b37e;
   --green-500: #00875f;
+}
+:focus {
+  outline: transparent;
+  box-shadow: 0 0 0 2px var(--green-300);
 }
 
 * {
@@ -28,6 +33,10 @@ input,
 textarea,
 button {
   font-family: "Roboto", sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 1rem;
+}
+
+button {
+  cursor: pointer;
 }
