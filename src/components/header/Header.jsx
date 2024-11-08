@@ -5,8 +5,8 @@ function Header({}) {
   return (
     <header className={styles.header}>
       <h1>
-        oi
         <img src={logo} alt="two overlapping triangles pointing up-right" />
+        hello
       </h1>
     </header>
   );
