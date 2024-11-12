@@ -92,6 +92,7 @@
   padding: 1rem;
   border-radius: 8px;
   background-color: var(--gray-900);
+  color: var(--gray-100);
 }
 
 .commentForm footer {

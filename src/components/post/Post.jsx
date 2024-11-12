@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { formatDateTime, formatRelativeDate } from "../../functions/formatDate";
 import { Avatar } from "../Avatar/Avatar";
 import { Comment } from "../Comment/Comment";
 import styles from "./Post.module.css";
 
 export const Post = ({ post }) => {
+  const [comments, setComments] = useState([
+    "ola, post muito legal",
+    "hahahaha",
+  ]);
+
+  const [newCommentText, setNewCommentText] = useState("");
+
+  // ----- DYNAMIC RENDERING -----
   const postContent = post.content.map((line) => {
     switch (line.type) {
       case "paragraph":
@@ -30,6 +38,19 @@ export const Post = ({ post }) => {
     );
   });
 
+  // ----- FORM FUNCTIONS -----
+
+  function handleSubmitComment() {
+    event.preventDefault();
+    const commentContent = event.target.comment.value;
+    setComments([...comments, commentContent]);
+    setNewCommentText("");
+  }
+
+  function handleNewCommentChange() {
+    setNewCommentText(event.target.value);
+  }
+
   return (
     <article className={styles.post}>
       <header className={styles.header}>
@@ -52,20 +73,27 @@ export const Post = ({ post }) => {
 
         <p>{postTags}</p>
       </div>
-      <form action="POST" className={styles.commentForm}>
+      <form
+        action="POST"
+        onSubmit={handleSubmitComment}
+        className={styles.commentForm}
+      >
         <label htmlFor="comment">Deixe seu feedback</label>
         <textarea
           name="comment"
           id="comment"
           placeholder="Deixe um comentário"
+          onChange={() => handleNewCommentChange()}
+          value={newCommentText}
         />
         <footer>
           <button type="submit">Enviar</button>
         </footer>
       </form>
       <div className={styles.commentSection}>
-        <Comment />
-        <Comment />
+        {comments.map((comment) => (
+          <Comment content={comment} key={comment} />
+        ))}
       </div>
     </article>
   );

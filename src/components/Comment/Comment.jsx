@@ -3,7 +3,7 @@ import styles from "./Comment.module.css";
 import { ThumbsUp, Trash } from "phosphor-react";
 import { Avatar } from "../Avatar/Avatar";
 
-export const Comment = () => {
+export const Comment = ({ content }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCounter, setLikesCounter] = useState(0);
 
@@ -35,12 +35,7 @@ export const Comment = () => {
               <Trash size={24} />
             </button>
           </header>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem,
-            eum? Dignissimos, omnis, excepturi maiores aspernatur quos eveniet
-            tempora suscipit magni eligendi fugit, architecto id. Suscipit sequi
-            quam adipisci optio odio?
-          </p>
+          <p>{content}</p>
         </div>
         <footer>
           <button
