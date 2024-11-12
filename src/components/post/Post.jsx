@@ -1,42 +1,56 @@
 import React from "react";
-import styles from "./Post.module.css";
+import { formatDateTime, formatRelativeDate } from "../../functions/formatDate";
+import { Avatar } from "../Avatar/Avatar";
 import { Comment } from "../Comment/Comment";
+import styles from "./Post.module.css";
 
-export const Post = () => {
+export const Post = ({ post }) => {
+  const postContent = post.content.map((line) => {
+    switch (line.type) {
+      case "paragraph":
+        return <p key={line.index}>{line.content}</p>;
+
+      case "link":
+        return (
+          <p key={line.index}>
+            <a href={line.content}>{line.content}</a>
+          </p>
+        );
+      default:
+        <p key={line.index}>{line.content}</p>;
+        break;
+    }
+  });
+
+  const postTags = post.tags.map((tag) => {
+    return (
+      <a href="" key={tag.index}>
+        #{tag}
+      </a>
+    );
+  });
+
   return (
     <article className={styles.post}>
       <header className={styles.header}>
         <div className={styles.author}>
-          <img
-            className={styles.avatar}
-            src="https://github.com/joaolavelino.png"
-            alt=""
-          />
+          <Avatar src={post.author.avatarUrl} border />
           <div className={styles.info}>
-            <strong>João Avelino</strong>
-            <span>Web Developer</span>
+            <strong>{post.author.name}</strong>
+            <span>{post.author.role}</span>
           </div>
         </div>
-        <time title="8 de novembro às 17:40" dateTime="2024-11-08 17:47:40">
-          Publicado há 1h
+        <time
+          title={formatDateTime(post.publishedAt)}
+          dateTime={post.publishedAt.toISOString()}
+        >
+          {formatRelativeDate(post.publishedAt)}
         </time>
       </header>
       <div className={styles.content}>
-        <p>Título do Post</p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat in
-          placeat optio, similique repudiandae ex dicta distinctio, adipisci
-          ducimus animi non deleniti iusto quisquam vitae praesentium suscipit
-          sit odit? Enim!
-        </p>
-        <p>
-          <a href="#">Link para outra página</a>
-        </p>
-        <p>
-          <a href="#">#webdev</a>
-          <a href="#">#react</a>
-          <a href="#">#rocketseat</a>
-        </p>
+        {postContent}
+
+        <p>{postTags}</p>
       </div>
       <form action="POST" className={styles.commentForm}>
         <label htmlFor="comment">Deixe seu feedback</label>
