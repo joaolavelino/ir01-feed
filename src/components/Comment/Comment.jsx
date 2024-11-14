@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import styles from "./Comment.module.css";
 import { ThumbsUp, Trash } from "phosphor-react";
 import { Avatar } from "../Avatar/Avatar";
+import { formatDateTime, formatRelativeDate } from "../../functions/formatDate";
 
-export const Comment = () => {
+export const Comment = ({ content, publishedAt, id, onDelete }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCounter, setLikesCounter] = useState(0);
 
-  const toggleLike = async () => {
-    await setLikesCounter(isLiked ? likesCounter - 1 : likesCounter + 1);
+  const toggleLike = () => {
+    setLikesCounter((state) => (isLiked ? state - 1 : state + 1));
     setIsLiked(!isLiked);
     return;
   };
@@ -22,25 +23,17 @@ export const Comment = () => {
             <div className={styles.authorInfo}>
               <strong>Diego Fernandes</strong>
               <time
-                title="Três de Novembro, às 20 horas e 30 minutos"
-                dateTime="2024-11-03 20:30:34"
+                title={formatDateTime(publishedAt)}
+                dateTime={publishedAt.toString()}
               >
-                Há cerca de 2h
+                {formatRelativeDate(publishedAt)}
               </time>
             </div>
-            <button
-              title="Deletar comentário"
-              onClick={() => window.alert("Excluir Comentário")}
-            >
+            <button title="Deletar comentário" onClick={() => onDelete(id)}>
               <Trash size={24} />
             </button>
           </header>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem,
-            eum? Dignissimos, omnis, excepturi maiores aspernatur quos eveniet
-            tempora suscipit magni eligendi fugit, architecto id. Suscipit sequi
-            quam adipisci optio odio?
-          </p>
+          <p>{content}</p>
         </div>
         <footer>
           <button

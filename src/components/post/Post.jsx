@@ -1,34 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import { formatDateTime, formatRelativeDate } from "../../functions/formatDate";
 import { Avatar } from "../Avatar/Avatar";
 import { Comment } from "../Comment/Comment";
 import styles from "./Post.module.css";
+import { v4 as uuidv4 } from "uuid";
 
 export const Post = ({ post }) => {
-  const postContent = post.content.map((line) => {
+  const [comments, setComments] = useState([]);
+
+  const [newCommentText, setNewCommentText] = useState("");
+
+  // ----- DYNAMIC RENDERING -----
+  const postContent = post.content.map((line, index) => {
     switch (line.type) {
       case "paragraph":
-        return <p key={line.index}>{line.content}</p>;
+        return <p key={index}>{line.content}</p>;
 
       case "link":
         return (
-          <p key={line.index}>
+          <p key={index}>
             <a href={line.content}>{line.content}</a>
           </p>
         );
       default:
-        <p key={line.index}>{line.content}</p>;
+        <p key={index}>{line.content}</p>;
         break;
     }
   });
 
-  const postTags = post.tags.map((tag) => {
+  const postTags = post.tags.map((tag, index) => {
     return (
-      <a href="" key={tag.index}>
+      <a href="" key={index}>
         #{tag}
       </a>
     );
   });
+
+  // ----- FORM FUNCTIONS -----
+
+  function handleSubmitComment() {
+    event.preventDefault();
+    const newComment = {
+      id: { uuidv4 },
+      publishedAt: Date.now(),
+      content: event.target.comment.value,
+    };
+    setComments([...comments, newComment]);
+    setNewCommentText("");
+  }
+
+  function handleNewCommentChange() {
+    setNewCommentText(event.target.value);
+  }
+
+  function handleCommentValidation() {
+    event.target.setCustomValidity("O comentário não pode ser vazio");
+  }
+
+  const isNewCommentEmpty = !newCommentText.length;
+
+  // ----- MANAGE COMMENTS -----
+
+  const deleteComment = (id) => {
+    let updatedCommentList = comments.filter((comment) => comment.id !== id);
+    setComments(updatedCommentList);
+  };
 
   return (
     <article className={styles.post}>
@@ -52,20 +88,37 @@ export const Post = ({ post }) => {
 
         <p>{postTags}</p>
       </div>
-      <form action="POST" className={styles.commentForm}>
+      <form
+        action="POST"
+        onSubmit={handleSubmitComment}
+        className={styles.commentForm}
+      >
         <label htmlFor="comment">Deixe seu feedback</label>
         <textarea
           name="comment"
           id="comment"
           placeholder="Deixe um comentário"
+          onChange={() => handleNewCommentChange()}
+          value={newCommentText}
+          required
+          onInvalid={handleCommentValidation}
         />
         <footer>
-          <button type="submit">Enviar</button>
+          <button type="submit" disabled={isNewCommentEmpty}>
+            Enviar
+          </button>
         </footer>
       </form>
       <div className={styles.commentSection}>
-        <Comment />
-        <Comment />
+        {comments.map((comment) => (
+          <Comment
+            content={comment.content}
+            publishedAt={comment.publishedAt}
+            key={comment.id}
+            id={comment.id}
+            onDelete={deleteComment}
+          />
+        ))}
       </div>
     </article>
   );
