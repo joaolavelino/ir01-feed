@@ -8,8 +8,8 @@ export const Comment = ({ content, publishedAt, id, onDelete }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCounter, setLikesCounter] = useState(0);
 
-  const toggleLike = async () => {
-    await setLikesCounter(isLiked ? likesCounter - 1 : likesCounter + 1);
+  const toggleLike = () => {
+    setLikesCounter((state) => (isLiked ? state - 1 : state + 1));
     setIsLiked(!isLiked);
     return;
   };
